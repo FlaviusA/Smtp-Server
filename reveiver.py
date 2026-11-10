@@ -10,7 +10,7 @@ from aiosmtpd.controller import Controller
 
 class SMTPHandler:
     async def handle_DATA(self, server, session, envelope):
-        # Save the complete email.
+       
         folder = Path("received_emails")
         folder.mkdir(exist_ok=True)
 
@@ -22,14 +22,11 @@ class SMTPHandler:
             print(f"Could not save email: {error}", flush=True)
             return "451 Could not save email"
 
-        # Extract the subject and plain-text body.
         message = BytesParser(
             policy=policy.default
         ).parsebytes(envelope.original_content)
 
         body = message.get_body(preferencelist=("plain",))
-
-        # Display the email in the terminal.
         print("\n========== NEW EMAIL ==========")
         print("From:", envelope.mail_from)
         print("To:", ", ".join(envelope.rcpt_tos))
